@@ -10,6 +10,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>imooc-security-borowser</artifactId>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.imooc</groupId>
+            <artifactId>imooc-security-core</artifactId>
+            <version>${imooc.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+    </dependencies>
 
 </project>

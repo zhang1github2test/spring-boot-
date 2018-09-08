@@ -10,6 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>imooc.security-demo</artifactId>
-
+    <dependencies>
+        <dependency>
+            <artifactId>imooc-security-borowser</artifactId>
+            <groupId>com.imooc</groupId>
+            <version>${imooc.security.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
