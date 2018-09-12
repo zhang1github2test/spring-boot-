@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -31,9 +32,28 @@ public class UserControllerTest {
     @Test
     public void whenQuerySuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user").
-                contentType(MediaType.APPLICATION_JSON_UTF8))
+                contentType(MediaType.APPLICATION_JSON_UTF8)
+                .param("username","jojo")
+                .param("ageTo","60")
+                .param("age","18")
+                .param("xxx","yyy")
+        )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                .andExpect(MockMvcResultMatchers.jsonPath("$.length()")
                         .value(3));
+    }
+    @Test
+    public void whenGetInfoSuccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8) )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("tom"));
+
+    }
+    @Test
+    public void whenGetInfoFail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/ee")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 }
