@@ -64,7 +64,7 @@ public class UserControllerTest {
 
         Date date = new Date();
         System.out.println(date.getTime());
-        String content = "{\"id\":\"12\",\"username\":\"tom\",\"password\":\"123456\",\"birthday\":"+date.getTime()+"}";
+        String content = "{\"username\":\"tom\",\"password\":null,\"birthday\":"+date.getTime()+"}";
         String reuslt = mockMvc.perform(MockMvcRequestBuilders.post("/user").contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -73,5 +73,18 @@ public class UserControllerTest {
 
         System.out.println(reuslt);
     }
+    @Test
+    public void whenUpdateSuccess() throws Exception {
 
+        Date date = new Date();
+        System.out.println(date.getTime());
+        String content = "{\"id\":\"1\",\"username\":\"tom\",\"password\":null,\"birthday\":"+date.getTime()+"}";
+        String reuslt = mockMvc.perform(MockMvcRequestBuilders.put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(content))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                .andReturn().getResponse().getContentAsString();
+
+        System.out.println(reuslt);
+    }
 }

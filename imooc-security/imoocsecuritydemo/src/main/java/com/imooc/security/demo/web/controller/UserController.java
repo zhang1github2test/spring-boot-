@@ -6,6 +6,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,7 +33,7 @@ public class UserController {
         users.add(new User());
         return users;
     }
-    @RequestMapping(value = "/user/{id:\\d+}")
+    @RequestMapping(value = "/user/{id:\\d+}",method = RequestMethod.GET)
     public User getInfo(@PathVariable String id){
         User user = new User();
         user.setUsername("tom");
@@ -40,7 +41,23 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public User create(@Valid @RequestBody User user){
+    public User create(@Valid @RequestBody User user,BindingResult errors){
+        if(errors.hasErrors()){
+            errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
+        }
+        System.out.println(user.getId());
+        System.out.println(user.getBirthday());
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+        user.setId(1);
+        return user;
+    }
+
+    @PutMapping("/user/{id:\\d+}")
+    public User udpate(@Valid @RequestBody User user,BindingResult errors){
+        if(errors.hasErrors()){
+            errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
+        }
         System.out.println(user.getId());
         System.out.println(user.getBirthday());
         System.out.println(user.getUsername());
