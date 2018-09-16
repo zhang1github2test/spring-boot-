@@ -2,11 +2,13 @@ package com.imooc.security.demo.web.controller;
 
 import com.imooc.security.demo.dto.User;
 import com.imooc.security.demo.dto.UserQueryCondition;
+import com.imooc.security.demo.exception.UserNotExistException;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,9 +21,9 @@ import java.util.List;
  */
 @RestController
 public class UserController {
-    @RequestMapping(value="/user",method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public List<User> query(UserQueryCondition conditon,
-                            @PageableDefault(page=2,size=15,sort="name,desc")Pageable  pageable){
+                            @PageableDefault(page = 2, size = 15, sort = "name,desc") Pageable pageable) {
         System.out.println(ReflectionToStringBuilder.
                 toString(conditon, ToStringStyle.MULTI_LINE_STYLE));
         System.out.println(pageable.getPageSize());
@@ -33,16 +35,19 @@ public class UserController {
         users.add(new User());
         return users;
     }
-    @RequestMapping(value = "/user/{id:\\d+}",method = RequestMethod.GET)
-    public User getInfo(@PathVariable String id){
+
+    @RequestMapping(value = "/user/{id:\\d+}", method = RequestMethod.GET)
+    public User getInfo(@PathVariable String id) {
+     //   throw new UserNotExistException("1");
+        System.out.println("进入到getInfo请求");
         User user = new User();
         user.setUsername("tom");
         return user;
     }
 
     @PostMapping("/user")
-    public User create(@Valid @RequestBody User user,BindingResult errors){
-        if(errors.hasErrors()){
+    public User create(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
             errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
         }
         System.out.println(user.getId());
@@ -54,9 +59,13 @@ public class UserController {
     }
 
     @PutMapping("/user/{id:\\d+}")
-    public User udpate(@Valid @RequestBody User user,BindingResult errors){
-        if(errors.hasErrors()){
-            errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
+    public User udpate(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(error -> {
+                        System.out.println(error.getDefaultMessage());
+                    }
+
+            );
         }
         System.out.println(user.getId());
         System.out.println(user.getBirthday());
@@ -65,5 +74,10 @@ public class UserController {
         user.setId(1);
         return user;
     }
+    @DeleteMapping("/user/{id:\\d+}")
+    public void delete(@PathVariable String id){
+        System.out.println(id);
+    }
+
 
 }
